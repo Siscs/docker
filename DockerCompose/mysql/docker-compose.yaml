@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+
+  dotz_api:
+    build:
+      context: .
+    image: dotz
+    container_name: dotzapi
+    restart: always
+    environment:
+      ASPNETCORE_ENVIRONMENT: Stage
+    ports:
+      - "8081:80"
+    networks:
+      - dotz-network
+    depends_on:
+      - mysql8_db
+
+  mysql8_db:
+    image: mysql
+    container_name: mysql8_db
+    command: --default-authentication-plugin=mysql_native_password --lower_case_table_names=1
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: MyD0tz!123
+      MYSQL_USER: dotz
+      MYSQL_PASSWORD: MyD0tz!123
+      MYSQL_DATABASE: DOTZ
+    volumes:
+      - type: bind
+        source: ../mysql_data
+        target: /var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - dotz-network
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 8085:8080
+    networks:
+      - dotz-network
+    depends_on:
+      - mysql8_db
+
+networks:
+  dotz-network:
+    driver: bridge
+
+#volumes:
+#  mysql8-data:
+#    external: true

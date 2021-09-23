@@ -1,0 +1,33 @@
+version: '3.4'
+
+services:
+
+  acesso.api:
+    image: acessoapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - TokenSigningKey=F4FC26F3-2EE7-4EF3-AB9E-0694741D384F
+      - ThisClientAppSecret=41EC30DE-43CF-4A9F-AD3E-572EBD66E8EA
+      - AuthServerTokenEndPoint=https://vrealdev16.finamax.com.br:4051/oauth2/token
+      
+      - SwaggerEnabled=true
+      - SwaggerTokenUrl=https://vrealdev16.finamax.com.br:4051/oauth2/token
+      - HmacSha256Secret=3f0b498ad266af1aa64e24d8426c0ada
+      
+      - BizLogic__AcessoScope=*
+      - BizLogic__AcessoSub=
+      - BizLogic__AcessoExpires=1
+      - BizLogic__AcessoServiceAccount=finamax
+      - BizLogic__AcessoTenantId=ffc2943f-97d3-4555-8373-e78a22605527
+      - BizLogic__AcessoAudienceUri=https://identityhomolog.acesso.io
+      - BizLogic__AcessoAccessTokenUri=https://identityhomolog.acesso.io/oauth2/token
+      - BizLogic__AcessoIssuerDomain=iam.acesso.io
+      - BizLogic__AcessoGrantType=urn:ietf:params:oauth:grant-type:jwt-bearer
+      - BizLogic__AcessoPrivateKeyPem=MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC3S1UBTnJjaIkry9YbeG3V/L0J+zeL8FCghJ1YBtUJ9eMIiCzeEm6+WxXZmM3L9UNxTDzhH3MxQtvKOrGyv6hBujgvVDWEzVJuzxCuSN6WgtYPVslP7dY+g+iWogdP7ftIxldvknZyVmNjWMLWcRRO0le+CHdyiyOEp+HWjQnVMGldd9mMjKWOeuAL6SJK8cwaRKO6MtLbTw88v2SOWo+2C0Eg1zXfIq4hUNhiuaw7GsvitaFPYe8uO7Id2awThBYukcK9feclO44t5++aAhxdmZkE8x/qfuIznO1a3+XxFz3H/dWrJWRFl3bgqChQsOG84ZSJugc1y1NyHW6WCedDAgMBAAECggEAYlMS4oSGcDUfgFL0JABSSzws3DHa9kKPvcvl69aeaZ1xkJ4cE3Sn241ZB0UlAIgtCZXwAoOwc3h+FtmtgUm2pKuUgC8YFold8vs444VLgknlMo1HqIzZJOf12PhKG+J5rexX8w4KZANbhWuT+Rzn2/CSCOrZyKRDBWJZj5JQ9/76zjOHdkM7rW87C123dFqy2S07Aelm6kreA+y2bn7AyZT9kd0LxGmZQgmC7WSXVGj62c11uZoODvTvsoiioEwh8LLBUxi1xQ9zy61OdZgI7M7PERXsGC/AF/6mOPMnzSaORSicFX+SN6Ol552iHm4oUzVdLN37+NNGqmPScSjGQQKBgQDuYntxZt0Ugb3c6E5BNsuuoYBM2OQ8moJt7PIEfmfTNHIftAe+/kqsLn/9dOJhEPyGCIt7BhVvvuAcENPnvKYNQ3KbGBCsAroM1igVj75bC0teYolEXJE3PIjw8xHvRaHJjD/7lDafbeoke1E15i10Oy/s6JUsxDs0Uc+nOf1t6wKBgQDE1rSYizQ6N2OAInanRmgugxtId+Rpbavq+8d5cB4zFMP7p767wPfyt7JDtUAHujzrkP6bj0saJuV0nddUXfvB7drHQBtn8ucnQiEBQOOsx9YUa48/nto85RYnhE9mXuyWx8s9zmEJlrWkGnToBGQYiEOyRhkb30qC0R4e0l6eCQKBgQChDL/BGXF7DTwsJnXX8SEiVdHMGSv5FZnQkiffiVazhdckPAiPrFTehnvJzFG0qjkwhE1XTADngdj+nQ/Mm9LDWzHuPg/lZeI0Eer6xiYgdDzzAzchjDg/TRJnVpBjSnPHKo1/dd6BT0zEYNu4wk0rHWF/eJJvsBMfgbX8kFz7CQKBgAZUDMxWtWAlxbop4XyxQ8ozBt6GlD5be0p7u8cItr/XrBFcLEKnCpGwHDgXDK7y6uB78eOYcMavd3MPXAvnVZ+/gOglBHyMD6hwdNUwe+FjL1vKtXlLJyMMDnFIzLCy3pJebAdZqj7/rGlRPG71LS6outxxan8954xbIsfE5avZAoGAdvW5k4bl/2OOSG74YNNjql3Ys/vwzkajOPf/i/NMOrxqcD1oWN17870kBE82CVo8itponCPLAhjYCiy24X0uhW5ob0MBNHoeM+iBxAM/oz6QEmo7ZVrGJl3GMuW5DSmflMTj43Qa6AW4E1u8d9BB0RRVjNk0gGUYVczpEf4GJHU=
+      
+    build:
+      context: .
+      dockerfile: src/Acesso.API/Dockerfile
+      args:
+        - PAT=jgm47ei3dlffswewju5pqqlmsxwojk3qtb5skxcvxgky3esj7prq
+        - FEED_URL=https://vwon16.finamax.com.br/DefaultCollection/_packaging/FnxCore.Components/nuget/v3/index.json

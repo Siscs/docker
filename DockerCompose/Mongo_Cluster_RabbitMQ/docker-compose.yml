@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  cluster:
+    image: pedroballona/mongo-cluster:1.0
+    container_name: mongodb_cluster
+    restart: always
+    volumes:
+      - ./mongodb_cluster/data:/var/data/db
+    ports:
+      - "27017:27017"
+      - "27018:27018"
+      - "27019:27019"
+#    environment:
+#      - MONGO_INITDB_ROOT_USERNAME=totvs
+#      - MONGO_INITDB_ROOT_PASSWORD=totvs
+    networks:
+      - totvs-network
+      
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_totvs
+    restart: always
+    volumes:
+      - ./rabbitmq/data:/var/lib/rabbitmq
+      - ./rabbitmq/var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_VHOST=totvs
+      - RABBITMQ_DEFAULT_USER=totvs
+      - RABBITMQ_DEFAULT_PASS=totvs
+    networks:
+      - totvs-network
+      
+networks:
+  totvs-network:
+    driver: bridge

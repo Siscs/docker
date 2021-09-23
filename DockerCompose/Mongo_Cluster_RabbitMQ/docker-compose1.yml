@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb_totvs
+    restart: always
+    volumes:
+      - ./mongodb/data:/data/db
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=totvs
+      - MONGO_INITDB_ROOT_PASSWORD=totvs
+    networks:
+      - totvs-network
+      
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_totvs
+    restart: always
+    volumes:
+      - ./rabbitmq/data:/var/lib/rabbitmq
+      - ./rabbitmq/var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_VHOST=totvs
+      - RABBITMQ_DEFAULT_USER=totvs
+      - RABBITMQ_DEFAULT_PASS=totvs
+    networks:
+      - totvs-network
+      
+networks:
+  totvs-network:
+    driver: bridge

@@ -1,0 +1,9 @@
+
+# data folders
+
+**/[Mm]ongodb_siscs/
+**/[Rr]abbitmq_siscs/
+**/[Mm]ssql_data/
+**/[Pp]pg_data/
+**/node_modules/
+

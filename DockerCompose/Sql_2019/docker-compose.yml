@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  sql2019:
+    image: mcr.microsoft.com/mssql/server:2019-CU12-ubuntu-20.04
+    container_name: sql2019
+#    restart: always
+#      build:
+#        context: .
+#        dockerfile: Dockerfile
+    volumes:
+      - ./mssql_data:/var/opt/mssql/data
+#    volumes:
+#      - type: volume
+#        source: mssql_local
+#        target: /var/opt/mssql
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Siscs@admin
+      - MSSQL_PID=Developer
+    networks:
+      - sqlserver-network
+networks:
+  sqlserver-network:
+    driver: bridge
+#volumes:
+#  mssql_local:
+#    external: true

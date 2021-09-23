@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+#    command: bash -c "rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_federation_management rabbitmq_stomp"
+    volumes:
+      - type: bind
+        source: ./rabbitmq/data
+        target: /var/lib/rabbitmq
+    ports:
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_VHOST=siscs
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - rabbitmq-network  
+networks:
+  rabbitmq-network:
+    driver: bridge
+#volumes:
+#  mongodb_local:
+#    external: true
+#  pg_local:
+#    external: true
+#  pgadmin_local:
+#    external: true
+

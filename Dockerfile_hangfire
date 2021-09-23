@@ -1,0 +1,38 @@
+FROM microsoft/dotnet:2.1-aspnetcore-runtime-alpine3.7 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+RUN ["apk", "add", "--no-cache", "bash"]
+
+FROM microsoft/dotnet:2.1-sdk-alpine3.7 AS build
+WORKDIR /src
+COPY ["0 - Presentation/Portal.Investidor.Finamax.Hangfire/Portal.Investidor.Finamax.Hangfire.csproj", "0 - Presentation/Portal.Investidor.Finamax.Hangfire/"]
+COPY ["1 - Application/Portal.Investidor.Finamax.Application/Portal.Investidor.Finamax.Application.csproj", "1 - Application/Portal.Investidor.Finamax.Application/"]
+COPY ["2 - Domain/Portal.Investidor.Finamax.Domain/Portal.Investidor.Finamax.Domain.csproj", "2 - Domain/Portal.Investidor.Finamax.Domain/"]
+COPY ["3 - Infrastructure/Portal.Investidor.Finamax.External/Portal.Investidor.Finamax.External.csproj", "3 - Infrastructure/Portal.Investidor.Finamax.External/"]
+COPY ["3 - Infrastructure/Portal.Investidor.Finamax.IoC/Portal.Investidor.Finamax.IoC.csproj", "3 - Infrastructure/Portal.Investidor.Finamax.IoC/"]
+COPY ["3 - Infrastructure/Portal.Investidor.Finamax.Repository/Portal.Investidor.Finamax.Repository.csproj", "3 - Infrastructure/Portal.Investidor.Finamax.Repository/"]
+RUN dotnet restore "0 - Presentation/Portal.Investidor.Finamax.Hangfire/Portal.Investidor.Finamax.Hangfire.csproj"
+COPY . .
+WORKDIR "/src/0 - Presentation/Portal.Investidor.Finamax.Hangfire"
+RUN dotnet build "Portal.Investidor.Finamax.Hangfire.csproj" -c Release -o /app
+
+FROM build AS publish
+RUN dotnet publish "Portal.Investidor.Finamax.Hangfire.csproj" -c Release -o /app
+
+FROM base AS final
+
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
+RUN apk add --no-cache icu-libs
+
+ENV LC_ALL pt_BR.UTF-8
+ENV LANG pt_BR.UTF-8
+
+RUN apk add --no-cache tzdata
+ENV TZ America/Sao_Paulo
+
+WORKDIR /app
+COPY --from=publish /app .
+
+ENTRYPOINT ["dotnet", "Portal.Investidor.Finamax.Hangfire.dll"]

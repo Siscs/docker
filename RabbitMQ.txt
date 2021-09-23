@@ -1,0 +1,15 @@
+
+#criar o container
+docker run -d --hostname my-rabbit --name some-rabbit rabbitmq:3-management
+docker run -d --hostname my-rabbit --name some-rabbit -p 8080:15672 rabbitmq:3-management
+
+#shell
+docker exec -it rabbitmq /bin/sh
+
+#para startar container parado
+docker start rabbitmq
+
+#management
+http://localhost:15672
+
+guest/guest

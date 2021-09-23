@@ -1,0 +1,10 @@
+docker start postgresdev
+
+docker exec -it postgresdev psql -U cesar
+
+- POSTGRES_USER=cesar
+- POSTGRES_PASSWORD=Pgadmin123!
+
+
+
+Server=localhost; Database=assinatura-eletronica-test-db; UserID=postgres; Password=1senha!

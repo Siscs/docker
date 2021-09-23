@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgresdev
+#    restart: always
+#      build:
+#        context: ./postgres
+#        dockerfile: Dockerfile
+    volumes:
+      - type: volume
+        source: pg_local
+        target: /var/lib/postgresql/data
+    ports:
+      - "15432:5432"
+    environment:
+      - POSTGRES_USER=cesar
+      - POSTGRES_PASSWORD=Pgadmin123!
+#        - POSTGRES_USER=${POSTGRES_USER}
+#        - POSTGRES_PASSWORD=${POSTGRES_PASS}
+
+    networks:
+      - code-network
+networks:
+  code-network:
+    driver: bridge
+volumes:
+  pg_local:
+    external: true

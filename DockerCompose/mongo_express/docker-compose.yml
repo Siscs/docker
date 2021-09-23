@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+      
+  mongo-express:
+    image: mongo-express
+    container_name: mongoex_totvs
+    restart: always
+    ports:
+      - 8089:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb_totvs
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: totvs
+      ME_CONFIG_MONGODB_ADMINPASSWORD: totvs
+    links:
+      -  mongodb_totvs
+#    networks:
+#      - totvs-network
+
+#networks:
+#  totvs-network:
+#    driver: bridge

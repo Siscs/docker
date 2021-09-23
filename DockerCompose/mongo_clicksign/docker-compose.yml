@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: mongo
+    container_name: mongoclick
+    volumes:
+      - type: volume
+        source: mongo_clicksign
+        target: /data/db
+    ports:
+      - "27017:27017"
+#    environment:
+#      - MONGO_INITDB_ROOT_USERNAME=root
+#      - MONGO_INITDB_ROOT_PASSWORD=Mgadmin123!
+    networks:
+      - code-network
+networks:
+  code-network:
+    driver: bridge
+volumes:
+  mongo_clicksign:
+    external: true

@@ -1,0 +1,18 @@
+docker pull postgres
+
+docker pull dpage/pgadmin4
+
+docker network create --driver bridge postgres-network
+
+docker run --name pglocal --network=postgres-network -e "POSTGRES_PASSWORD=Pgadmin@2020" -p 5432:5432 -v /home/renatogroffe/Desenvolvimento/PostgreSQL:/var/lib/postgresql/data -d postgres
+
+docker volume create pgdata
+
+docker run --name pglocal --network=postgres-network -e "POSTGRES_PASSWORD=Pgadmin@2020" -p 5432:5432 -v pgdata:/var/lib/postgresql/data -d postgres
+
+#pgadmin4
+docker run --name pgadmin --network=postgres-network -p 15432:80 -e "PGADMIN_DEFAULT_EMAIL=csrsil@gmail.com" -e "PGADMIN_DEFAULT_PASSWORD=Pgadmin@2020" -d dpage/pgadmin4
+
+
+https://docker-unleashed.readthedocs.io/aula2.html
+

@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_siscs
+#    restart: always
+    volumes:
+      - ./rabbitmq_siscs/data:/var/lib/rabbitmq/mnesia
+      - ./rabbitmq_siscs/var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_VHOST=siscs
+      - RABBITMQ_DEFAULT_USER=siscs
+      - RABBITMQ_DEFAULT_PASS=siscs
+    networks:
+      - siscs-network
+      
+networks:
+  siscs-network:
+    driver: bridge

@@ -1,0 +1,41 @@
+
+FROM microsoft/dotnet:2.2-aspnetcore-runtime AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+RUN ["rm", "/etc/localtime"]
+RUN ["ln", "-s", "/usr/share/zoneinfo/America/Sao_Paulo", "/etc/localtime"]
+
+FROM microsoft/dotnet:2.2-sdk AS build
+ARG FEED_URL
+ARG PAT
+WORKDIR /src
+
+COPY ./NuGet.Config /root/.nuget/NuGet/NuGet.Config
+
+RUN wget -qO- https://raw.githubusercontent.com/Microsoft/artifacts-credprovider/master/helpers/installcredprovider.sh | bash
+
+ENV DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=0
+
+ENV VSS_NUGET_EXTERNAL_FEED_ENDPOINTS="{\"endpointCredentials\": [{\"endpoint\":\"${FEED_URL}\", \"password\":\"${PAT}\"}, {\"endpoint\":\"https://api.nuget.org/v3/index.json\" }]}"
+
+COPY src/Clicksign.API/Clicksign.API.csproj src/Clicksign.API/
+COPY src/Clicksign.IoC/Clicksign.IoC.csproj src/Clicksign.IoC/
+COPY src/Clicksign.WsIntegrations/Clicksign.WsIntegrations.csproj src/Clicksign.WsIntegrations/
+COPY src/Clicksign.BizLogic/Clicksign.BizLogic.csproj src/Clicksign.BizLogic/
+COPY src/Clicksign.DataAccess/Clicksign.DataAccess.csproj src/Clicksign.DataAccess/
+
+RUN dotnet restore src/Clicksign.API/Clicksign.API.csproj
+COPY . .
+WORKDIR /src/src/Clicksign.API
+RUN dotnet build Clicksign.API.csproj -c Release -o /app
+
+FROM build AS publish
+RUN dotnet publish Clicksign.API.csproj -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app .
+ENTRYPOINT ["dotnet", "Clicksign.API.dll"]
+

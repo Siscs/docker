@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodev
+    volumes:
+      - type: volume
+        source: mongodb_local
+        target: /data/db
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=Mgadmin123!
+    networks:
+      - mongo-network
+  mongo-express:
+    image: mongo-express
+    container_name: mongodbex
+    restart: "no"
+    ports:
+      - "8089:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodev
+      - ME_CONFIG_BASICAUTH_USERNAME=root
+      - ME_CONFIG_BASICAUTH_PASSWORD=Mgadmin123!
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=Mgadmin123!
+      - ME_CONFIG_MONGODB_PORT=27017
+    depends_on: 
+      - mongodb
+    links:
+      - mongodb
+    networks:
+      - mongo-network
+  postgres:
+    image: postgres:12.6
+    container_name: pgdev
+#    restart: always
+#      build:
+#        context: ./postgres
+#        dockerfile: Dockerfile
+    volumes:
+      - type: volume
+        source: pg_local
+        target: /var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=cesar
+      - POSTGRES_PASSWORD=Pgadmin123!
+#        - POSTGRES_USER=${POSTGRES_USER}
+#        - POSTGRES_PASSWORD=${POSTGRES_PASS}
+    networks:
+      - pg-network
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    volumes:
+      - type: volume
+        source: pgadmin_local
+        target: /var/lib/pgadmin
+    ports:
+      - "8085:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=cesarsilva@procobservicos.com.br
+      - PGADMIN_DEFAULT_PASSWORD=Pgadmin123!
+    networks:
+      - pg-network
+    depends_on:
+      - postgres
+      
+networks:
+  mongo-network:
+    driver: bridge
+  pg-network:
+    driver: bridge
+volumes:
+  mongodb_local:
+    external: true
+  pg_local:
+    external: true
+  pgadmin_local:
+    external: true
+

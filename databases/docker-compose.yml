@@ -1,0 +1,29 @@
+
+version: "3"
+
+networks: 
+    databases:
+        driver: bridge
+
+services:
+    sqlserver2019:
+        #container_name: sql_2019
+        #build: .
+        image: sqlserver:2019
+        environment: 
+            ACCEPT_EULA: "Y"
+            SA_PASSWORD: "Ryan@123"
+        ports:
+            - "1434:1433"
+        volumes:
+            - ./:/var/lib/data
+        networks: 
+            - databases
+        #depends_on:
+        #    - sqlserver2019
+        
+    mongo_db:
+
+
+
+
